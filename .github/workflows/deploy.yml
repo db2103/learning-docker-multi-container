@@ -1,0 +1,29 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Multicontainer deployment
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: building the test react code 
+      run: docker build -t db2103/react-test -f Dockerfile.dev .
+      
+    - name: testing the react code
+      run: docker run -e CI=true db2103/react-test npm test
+  
+
+    - run: docker build -t db2103/multi-client ./client
+    - run: docker build -t db2103/multi-nginx ./nginx
+    - run: docker build -t db2103/multi-server ./server
+    - run: docker build -t db2103/multi-worker ./worker
+
