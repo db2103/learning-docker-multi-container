@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: building the test react code 
-      run: docker build -t db2103/react-test -f Dockerfile.dev .
+      run: docker build -t db2103/react-test -f Dockerfile.dev ./client
       
     - name: testing the react code
       run: docker run -e CI=true db2103/react-test npm test
